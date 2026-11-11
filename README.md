@@ -9,6 +9,9 @@
 ## YC RFS track: Data for the Real World (Fall 2026)
 The physical economy (manufacturing, logistics, the goods that cross borders) still runs on sparse, lagging data: public customs statistics arrive 2–6 months late and rarely show what buyers want *right now*. Every company using Brain for Cross-border Deal generates real-world B2B demand signals in the course of normal outreach: which countries reply, ask for quotes, book meetings and close, for which product categories (HS codes), this week. We collect these events with consent, strip company and contact identity, enforce a minimum cohort (≥5 user companies, ≥20 buyers) plus differential-privacy noise, and publish them back as a live demand index. The data set grows with every user, and that is the moat.
 
+## Market Data (real, anonymized)
+The **Market Data** page in the demo is built from DealPilot's real operating data: the enterprise product's email performance, the lead database (11,000+ companies), the outreach log (2,200+ emails), the sales pipeline, and tracked proposal opportunities. All of it is aggregated to **country × industry × month**. Company names, contacts, email addresses, websites, notes, deal amounts and exact dates are removed; any group with fewer than 5 records is hidden or merged into "Other", and every count is rounded to 5. The published file is `apps/web/data/showcase.json`.
+
 **Live demo (clickable prototype, sample data only):** https://robert-dealpilot.github.io/brain-for-cross-border-deal/ (or open `apps/web/index.html`).
 
 ---
