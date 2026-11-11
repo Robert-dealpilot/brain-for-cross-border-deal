@@ -75,6 +75,12 @@ th{color:var(--sub);font-weight:normal;font-size:12px}
 .drop{border:2px dashed var(--line);border-radius:12px;padding:20px;text-align:center;color:var(--sub)}
 .ch-ico{width:30px;height:30px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:13px}
 svg text{fill:var(--sub);font-size:11px}
+.cbox{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-top:8px;white-space:normal}
+.ctitle{font-size:12px;color:var(--sub);margin-bottom:4px}
+.steps{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.step{border:1px solid var(--line);border-radius:8px;padding:6px 8px;min-width:92px;font-size:12.5px}
+.chn{color:#fff;border-radius:6px;padding:1px 6px;display:inline-block;margin:3px 0;font-weight:bold}.arr{color:var(--sub)}
+.m.b{max-width:86%}
+
 .toggle{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
 .toggle button{border:0;background:var(--panel);color:var(--ink);padding:5px 10px}
 .toggle button.on{background:var(--brand);color:#fff}
@@ -175,6 +181,21 @@ const INBOX = [
   {f:"示意 C Bike GmbH",ch:"LinkedIn",c:"#0a66c2",t:"已接受你的邀請",w:"昨天",s:"已建立聯繫"},
   {f:"示意 B 驅動系統株式會社",ch:"LINE",c:"#06c755",t:"來週の打ち合わせ、火曜日はいかがでしょうか",w:"11/09",s:"約會議"},
 ];
+
+const PAL=["#1f5fd1","#e07a1f","#1f8a4c","#8e44ad"];
+const MONTHS=["12月","1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月"];
+function lineChart(names){ const W=520,H=210,P=30,mn=30,mx=100;
+  const x=i=>P+i*(W-P*2)/11, y=v=>H-P-(v-mn)*(H-P*2)/(mx-mn);
+  const grid=[40,60,80,100].map(g=>`<line x1="${P}" x2="${W-P}" y1="${y(g)}" y2="${y(g)}" stroke="currentColor" opacity=".12"/><text x="2" y="${y(g)+4}">${g}</text>`).join("");
+  const lines=names.map((n,k)=>{const d=SERIES[n];return `<polyline points="${d.map((v,i)=>x(i)+","+y(v)).join(" ")}" fill="none" stroke="${PAL[k]}" stroke-width="2.5"/><circle cx="${x(11)}" cy="${y(d[11])}" r="4" fill="${PAL[k]}"/><text x="${x(11)-34}" y="${y(d[11])-8}" style="fill:${PAL[k]};font-weight:bold">${n} ${d[11]}</text>`}).join("");
+  const ax=MONTHS.map((m,i)=>i%2===1?`<text x="${x(i)-10}" y="${H-8}">${m}</text>`:"").join("");
+  return `<div class="ctitle">需求熱度（0～100）・近 12 個月</div><svg viewBox="0 0 ${W} ${H}" width="100%">${grid}${lines}${ax}</svg>`; }
+function rankChart(list){ const W=520,row=28,H=list.length*row+10;
+  return `<div class="ctitle">各國需求熱度排名</div><svg viewBox="0 0 ${W} ${H}" width="100%">${list.map((c,i)=>{const w=(W-170)*c.idx/100;const col=c.tr==="up"?"#1f8a4c":c.tr==="down"?"#c62828":"#7a8499";
+    return `<text x="0" y="${i*row+19}">${c.f} ${c.c}</text><rect x="70" y="${i*row+6}" width="${w}" height="16" rx="4" fill="${i<3?"#1f5fd1":"#9db7ea"}"/><text x="${76+w}" y="${i*row+19}" style="font-weight:bold">${c.idx}</text><text x="${110+w}" y="${i*row+19}" style="fill:${col}">${c.tr==="up"?"▲":c.tr==="down"?"▼":"■"} ${c.d}</text>`}).join("")}</svg>`; }
+function channelChart(c){ const steps=c.ch.split(" → "); const full=[["第 1 天",steps[0],"首封信＋型錄"],["第 5 天",steps[0],"補一封短信"],["回覆後",steps[1]||steps[0],"約線上會議"],["會議後","Email","正式報價"]];
+  const col={Email:"#d93025",LINE:"#06c755",LinkedIn:"#0a66c2",Zalo:"#0068ff",WhatsApp:"#25d366",KakaoTalk:"#e0b400"};
+  return `<div class="ctitle">${c.c}：聯絡節奏</div><div class="steps">${full.map(s=>`<div class="step"><div class="muted">${s[0]}</div><div class="chn" style="background:${col[s[1]]||"#1f5fd1"}">${s[1]}</div><div>${s[2]}</div></div>`).join('<div class="arr">→</div>')}</div>`; }
 // ---------- 畫面 ----------
 const $ = (s)=>document.querySelector(s);
 const V = {};
@@ -211,15 +232,19 @@ V.brain = ()=>`
  <div class="m b">你好！我已經讀完你的官網、型錄和工廠影片，產品歸在 HS ${PROFILE.hs}。
 你想打哪一個國家？也可以問「哪 3 個國家最值得打」。</div>
 </div>
-<div class="chips">${["我要打日本","哪 3 個國家最值得打","越南的需求怎麼樣？","幫我寫日本的第一封信"].map(q=>`<button onclick="ask('${q}')">${q}</button>`).join("")}</div>
+<div class="chips">${["哪 3 個國家最值得打","我要打日本","比較日本和德國","越南的需求怎麼樣？","日本要用什麼管道？","幫我寫日本的第一封信"].map(q=>`<button onclick="ask('${q}')">${q}</button>`).join("")}</div>
 <div class="composer"><input id="q" placeholder="例如：德國對電輔車零件的需求在上升嗎？" onkeydown="if(event.key==='Enter')ask(this.value)"><button class="btn primary" onclick="ask($('#q').value)">送出</button></div></div>`;
 function reply(q){
   const c = COUNTRIES.find(x=>q.includes(x.c));
-  if(q.includes("3 個")) return {t:`依需求熱度和你的產品條件，建議先打：
+  if(q.includes("比較")){ const cs=COUNTRIES.filter(x=>q.includes(x.c)).map(x=>x.c); const pick=cs.length>=2?cs:["日本","德國"];
+    return {t:`${pick.join(" vs ")}：近 12 個月需求熱度比較。${pick[0]}最近 3 個月上升較快；${pick[1]}起點較高、成長較穩。`,s:"出處：需求趨勢匿名彙總＋各國海關進口統計（示意）",chart:()=>lineChart(pick)}; }
+  if(q.includes("管道")){ const c=COUNTRIES.find(x=>q.includes(x.c))||COUNTRIES[0];
+    return {t:`${c.f} ${c.c}的建議聯絡節奏如下（依當地商務習慣）：`,s:"管道習慣：初版，由市場分析部持續驗證",chart:()=>channelChart(c)}; }
+  if(q.includes("3 個")) return {chart:()=>rankChart(COUNTRIES.slice(0,6)),t:`依需求熱度和你的產品條件，建議先打：
 1. 日本 ${COUNTRIES[0].f}  熱度 78，近 3 個月詢價和回覆明顯上升（${COUNTRIES[0].d}）
 2. 德國 ${COUNTRIES[1].f}  熱度 74，進口持續成長，買家多
 3. 越南 ${COUNTRIES[2].f}  熱度 69，成長最快（${COUNTRIES[2].d}），電動機車組裝廠增加
-要看哪一國的細節？`,s:"出處：需求趨勢（1,284 家使用者匿名彙總）＋ UN Comtrade HS 8536.69（示意）"};
+要看哪一國的細節？（下圖是各國需求熱度排名）`,s:"出處：需求趨勢（1,284 家使用者匿名彙總）＋ UN Comtrade HS 8536.69（示意）"};
   if(q.includes("寫")) return {t:`件名：【IP67 防水コネクタ】e-Bike 向け｜サンプル提供のご案内
 
 示意 A 電動自行車株式會社　ご担当者様
@@ -234,12 +259,12 @@ function reply(q){
 ・名單庫找到 ${c.buyers} 家可能的買家
 ・建議管道：${c.ch}
 
-我不會顯示其他使用者的客戶或報價，只提供匯總後的趨勢。要看趨勢圖或買家名單嗎？`,s:`出處：需求趨勢（匿名彙總，門檻：至少 5 家使用者公司、20 個買家）＋ ${c.c}海關進口統計（示意）`}; }
+我不會顯示其他使用者的客戶或報價，只提供匯總後的趨勢。下面是近 12 個月的需求熱度趨勢。要看買家名單或聯絡計畫嗎？`,chart:()=>lineChart([c.c]),s:`出處：需求趨勢（匿名彙總，門檻：至少 5 家使用者公司、20 個買家）＋ ${c.c}海關進口統計（示意）`}; }
   return {t:"我先以你的產品（HS "+PROFILE.hs+"）來看。可以告訴我想打的國家嗎？例如日本、德國、越南、美國、印度。",s:""};
 }
 function ask(q){ q=(q||"").trim(); if(!q) return; const box=$("#msgs");
   box.insertAdjacentHTML("beforeend",`<div class="m u"></div>`); box.lastElementChild.textContent=q;
-  const r=reply(q); setTimeout(()=>{ box.insertAdjacentHTML("beforeend",`<div class="m b"></div>`); const el=box.lastElementChild; el.textContent=r.t; if(r.s){const s=document.createElement("span");s.className="src";s.textContent=r.s;el.appendChild(s);} box.scrollTop=box.scrollHeight; },350);
+  const r=reply(q); setTimeout(()=>{ box.insertAdjacentHTML("beforeend",`<div class="m b"></div>`); const el=box.lastElementChild; el.textContent=r.t; if(r.chart){const d=document.createElement("div");d.className="cbox";d.innerHTML=r.chart();el.appendChild(d);} if(r.s){const s=document.createElement("span");s.className="src";s.textContent=r.s;el.appendChild(s);} box.scrollTop=box.scrollHeight; },350);
   const qi=$("#q"); if(qi) qi.value=""; box.scrollTop=box.scrollHeight; }
 
 V.trends = ()=>`
