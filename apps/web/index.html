@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>全球商務腦 Brain for Cross-border Deal</title>
+<style>
+:root{
+  --bg:#f4f6fb;--panel:#ffffff;--ink:#172033;--sub:#5d6880;--line:#dfe4ee;
+  --brand:#1f5fd1;--brand2:#0f3f99;--soft:#e8f0ff;--ok:#1f8a4c;--warn:#b86e00;--bad:#c62828;
+  --up:#1f8a4c;--down:#c62828;--flat:#7a8499;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0f1420;--panel:#171e2d;--ink:#e6ebf5;--sub:#9aa6bf;--line:#2a3448;
+  --brand:#5b8ff0;--brand2:#9bbcff;--soft:#1d2a45;
+}}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Microsoft JhengHei","微軟正黑體","Noto Sans TC",system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.55}
+button{font:inherit;cursor:pointer}
+input,textarea,select{font:inherit;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.demo{background:#fff4d6;color:#6b4a00;text-align:center;font-size:12px;padding:4px 8px}
+@media (prefers-color-scheme: dark){.demo{background:#3a2e10;color:#f3d48a}}
+/* login */
+#login{display:flex;align-items:center;justify-content:center;min-height:calc(100% - 26px);padding:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px}
+.login-card{width:100%;max-width:400px;text-align:center}
+.logo{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--brand),#36b3a8);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:24px;font-weight:bold}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:9px;padding:9px 14px}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.block{display:block;width:100%;margin:8px 0}
+.btn.sm{padding:5px 10px;font-size:13px}
+/* app */
+#app{display:none;min-height:calc(100% - 26px)}
+.shell{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 26px)}
+nav{background:var(--panel);border-right:1px solid var(--line);padding:14px 10px;display:flex;flex-direction:column;gap:2px}
+nav .brand{display:flex;gap:10px;align-items:center;padding:4px 8px 14px}
+nav .brand .logo{width:34px;height:34px;font-size:16px;border-radius:10px}
+nav button{display:flex;gap:10px;align-items:center;text-align:left;border:0;background:transparent;color:var(--ink);padding:9px 10px;border-radius:9px}
+nav button.on{background:var(--soft);color:var(--brand);font-weight:bold}
+nav .meta{margin-top:auto;font-size:12px;color:var(--sub);padding:8px}
+main{padding:20px 24px;overflow:auto}
+h1{font-size:20px;margin:0 0 4px}
+.lead{color:var(--sub);margin:0 0 16px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.tile h3{margin:0 0 6px;font-size:15px}
+.muted{color:var(--sub);font-size:13px}
+.pill{display:inline-block;border-radius:999px;padding:1px 9px;font-size:12px;border:1px solid var(--line);color:var(--sub)}
+.pill.ok{color:var(--ok);border-color:var(--ok)}
+.pill.warn{color:var(--warn);border-color:var(--warn)}
+.pill.brand{color:var(--brand);border-color:var(--brand)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.sp{flex:1}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--sub);font-weight:normal;font-size:12px}
+.up{color:var(--up)}.down{color:var(--down)}.flat{color:var(--flat)}
+.bar{height:8px;border-radius:5px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--brand)}
+/* chat */
+.chat{display:flex;flex-direction:column;height:calc(100vh - 140px);background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.msgs{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.m{max-width:78%;padding:10px 13px;border-radius:12px;white-space:pre-wrap}
+.m.u{align-self:flex-end;background:var(--brand);color:#fff;border-bottom-right-radius:4px}
+.m.b{align-self:flex-start;background:var(--soft);border-bottom-left-radius:4px}
+.m .src{display:block;margin-top:6px;font-size:11.5px;opacity:.75}
+.composer{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line)}
+.composer input{flex:1}
+.chips{display:flex;gap:6px;flex-wrap:wrap;padding:0 10px 10px}
+.chips button{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:3px 10px;font-size:12.5px}
+.drop{border:2px dashed var(--line);border-radius:12px;padding:20px;text-align:center;color:var(--sub)}
+.ch-ico{width:30px;height:30px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:13px}
+svg text{fill:var(--sub);font-size:11px}
+.toggle{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.toggle button{border:0;background:var(--panel);color:var(--ink);padding:5px 10px}
+.toggle button.on{background:var(--brand);color:#fff}
+@media (max-width:820px){
+  .shell{grid-template-columns:1fr}
+  nav{flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);padding:8px}
+  nav .brand,nav .meta{display:none}
+  nav button{white-space:nowrap}
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  main{padding:14px 16px}
+  .m{max-width:92%}
+}
+</style>
+</head>
+<body>
+<div class="demo">本機示意介面（Prototype）｜畫面上的數字與公司都是示意資料，不是真實數據</div>
+
+<section id="login">
+  <div class="card login-card">
+    <div class="logo">B</div>
+    <h1 style="margin-top:10px">全球商務腦</h1>
+    <p class="lead">Brain for Cross-border Deal<br>接上 Email 與通訊工具，問商務腦要打哪個國家</p>
+    <button class="btn block primary" onclick="enter()">用 Google 帳號登入</button>
+    <button class="btn block" onclick="enter()">用 Microsoft 帳號登入</button>
+    <p class="muted" style="margin-top:14px">登入後你的資料只屬於你的公司；需求趨勢只用所有使用者的匿名彙總。</p>
+  </div>
+</section>
+
+<section id="app">
+<div class="shell">
+  <nav id="nav">
+    <div class="brand"><div class="logo">B</div><div><b>全球商務腦</b><div class="muted">示意公司股份有限公司</div></div></div>
+    <button data-v="connect">🔌 連接管道</button>
+    <button data-v="knowledge">📚 公司知識庫</button>
+    <button data-v="brain">🧠 問商務腦</button>
+    <button data-v="trends">📈 需求趨勢</button>
+    <button data-v="buyers">🏢 買家名單</button>
+    <button data-v="plan">🗺️ 聯絡計畫</button>
+    <button data-v="inbox">📥 收件匣</button>
+    <div class="meta">需求趨勢由 <b id="netUsers">1,284</b> 家使用者公司的匿名紀錄累積<br>最後更新：本週</div>
+  </nav>
+  <main id="view"></main>
+</div>
+</section>
+
+<script>
+// ---------- 示意資料 ----------
+const CHANNELS = [
+  {k:"gmail",n:"Gmail",c:"#d93025",s:"已連接",d:"sales@example-co.com・今日可寄 180／200"},
+  {k:"outlook",n:"Outlook",c:"#0a64c2",s:"未連接",d:"Microsoft 365 信箱"},
+  {k:"line",n:"LINE 官方帳號",c:"#06c755",s:"已連接",d:"對方加好友後才能傳訊息"},
+  {k:"wa",n:"WhatsApp Business",c:"#25d366",s:"未連接",d:"對方同意後，第一則用審核過的範本"},
+  {k:"li",n:"LinkedIn（輔助）",c:"#0a66c2",s:"輔助",d:"商務腦寫好訊息，你自己貼上送出"},
+  {k:"kakao",n:"KakaoTalk",c:"#f7c600",s:"未連接",d:"韓國：透過官方代理商"},
+  {k:"wechat",n:"WeChat",c:"#07c160",s:"未連接",d:"中國：需要企業帳號"},
+  {k:"zalo",n:"Zalo OA",c:"#0068ff",s:"未連接",d:"越南：官方帳號"},
+  {k:"tg",n:"Telegram",c:"#2aa1da",s:"未連接",d:"俄羅斯、中亞"},
+];
+const KNOW = [
+  {t:"官網 example-co.com",k:"網站",s:"已讀取 48 頁"},
+  {t:"2026 產品型錄.pdf",k:"簡報／型錄",s:"已拆 36 頁、12 項產品"},
+  {t:"工廠介紹影片.mp4",k:"影片",s:"已轉成文字（6 分鐘）"},
+  {t:"Facebook 粉專",k:"粉專",s:"已讀取最近 60 則貼文"},
+  {t:"產品圖 24 張",k:"圖片",s:"已辨識規格標示"},
+];
+const PROFILE = {name:"電輔車防水接頭（IP67）",hs:"8536.69",cert:"UL、CE、RoHS",moq:"1,000 pcs",lead:"30 天"};
+const COUNTRIES = [
+  {c:"日本",f:"🇯🇵",idx:78,tr:"up",d:"+18%",imp:"穩定成長",ch:"Email → LINE",buyers:42,lag:"週"},
+  {c:"德國",f:"🇩🇪",idx:74,tr:"up",d:"+11%",imp:"成長",ch:"Email → LinkedIn",buyers:57,lag:"週"},
+  {c:"越南",f:"🇻🇳",idx:69,tr:"up",d:"+24%",imp:"快速成長",ch:"Email → Zalo",buyers:23,lag:"月"},
+  {c:"美國",f:"🇺🇸",idx:66,tr:"flat",d:"+2%",imp:"持平",ch:"Email → LinkedIn",buyers:88,lag:"週"},
+  {c:"印度",f:"🇮🇳",idx:61,tr:"up",d:"+9%",imp:"成長",ch:"LinkedIn → WhatsApp",buyers:31,lag:"月"},
+  {c:"荷蘭",f:"🇳🇱",idx:58,tr:"flat",d:"0%",imp:"持平",ch:"Email → LinkedIn",buyers:19,lag:"月"},
+  {c:"韓國",f:"🇰🇷",idx:52,tr:"down",d:"-6%",imp:"略降",ch:"Email → KakaoTalk",buyers:14,lag:"月"},
+  {c:"泰國",f:"🇹🇭",idx:47,tr:"up",d:"+7%",imp:"成長",ch:"Email → LINE",buyers:11,lag:"資料累積中"},
+];
+const SERIES = { // 12 個月需求熱度（示意）
+  "日本":[52,55,54,58,60,61,63,66,68,71,75,78],
+  "德國":[60,61,63,62,64,66,67,69,70,71,72,74],
+  "越南":[41,44,46,49,52,55,57,60,62,64,67,69],
+  "美國":[63,64,62,65,66,64,65,66,64,65,66,66],
+  "印度":[48,49,51,52,53,55,56,57,58,59,60,61],
+  "荷蘭":[57,58,57,59,58,58,57,59,58,58,57,58],
+  "韓國":[60,59,58,58,57,56,56,55,54,53,53,52],
+  "泰國":[38,39,40,40,41,42,43,44,45,45,46,47],
+};
+const BUYERS = [
+  {n:"示意 A 電動自行車株式會社",c:"日本",t:"電輔車品牌",ch:["Email","LINE"],fit:92},
+  {n:"示意 B 驅動系統株式會社",c:"日本",t:"驅動系統廠",ch:["Email"],fit:88},
+  {n:"示意 C Bike GmbH",c:"德國",t:"整車品牌",ch:["Email","LinkedIn"],fit:86},
+  {n:"示意 D 電池模組株式會社",c:"日本",t:"電池模組廠",ch:["Email"],fit:81},
+  {n:"示意 E Xe Điện JSC",c:"越南",t:"電動機車組裝",ch:["Email","Zalo"],fit:79},
+  {n:"示意 F Components BV",c:"荷蘭",t:"零件經銷",ch:["Email","LinkedIn"],fit:74},
+];
+const INBOX = [
+  {f:"示意 A 電動自行車株式會社",ch:"Email",c:"#d93025",t:"型錄已收到，想確認 IP68 版本的交期",w:"今天 10:12",s:"要回覆"},
+  {f:"示意 E Xe Điện JSC",ch:"Zalo",c:"#0068ff",t:"Can you send price for 5,000 pcs?",w:"昨天",s:"詢價"},
+  {f:"示意 C Bike GmbH",ch:"LinkedIn",c:"#0a66c2",t:"已接受你的邀請",w:"昨天",s:"已建立聯繫"},
+  {f:"示意 B 驅動系統株式會社",ch:"LINE",c:"#06c755",t:"來週の打ち合わせ、火曜日はいかがでしょうか",w:"11/09",s:"約會議"},
+];
+// ---------- 畫面 ----------
+const $ = (s)=>document.querySelector(s);
+const V = {};
+let state = {country:"日本", trendMode:"week"};
+function enter(){ $("#login").style.display="none"; $("#app").style.display="block"; go("brain"); }
+function go(v){ document.querySelectorAll("#nav button[data-v]").forEach(b=>b.classList.toggle("on",b.dataset.v===v)); $("#view").innerHTML = V[v](); if(V[v+"_after"]) V[v+"_after"](); }
+document.querySelectorAll("#nav button[data-v]").forEach(b=>b.onclick=()=>go(b.dataset.v));
+
+V.connect = ()=>`
+<h1>連接管道</h1><p class="lead">Email 是主軸；通訊工具依你要打的國家接上。商務腦會說明每個工具能做和不能做的事。</p>
+<div class="grid g3">${CHANNELS.map(c=>`
+  <div class="tile"><div class="row"><span class="ch-ico" style="background:${c.c}">${c.n[0]}</span><b>${c.n}</b><span class="sp"></span>
+  <span class="pill ${c.s==="已連接"?"ok":c.s==="輔助"?"brand":""}">${c.s}</span></div>
+  <p class="muted">${c.d}</p>
+  <button class="btn sm ${c.s==="已連接"?"":"primary"}" onclick="this.textContent='示意：授權完成';this.disabled=true">${c.s==="已連接"?"管理":"連接"}</button></div>`).join("")}
+</div>
+<div class="tile" style="margin-top:14px"><h3>寄件網域檢查（sales@example-co.com）</h3>
+<div class="row"><span class="pill ok">SPF 通過</span><span class="pill ok">DKIM 通過</span><span class="pill warn">DMARC p=none（只監看）</span><span class="pill ok">一鍵退訂已開啟</span></div></div>`;
+
+V.knowledge = ()=>`
+<h1>公司知識庫</h1><p class="lead">把公司和產品的所有資料丟進來，商務腦會整理成產品檔案，寫信和回答問題都以這裡為準。</p>
+<div class="grid g2">
+ <div class="tile"><div class="drop">把網站網址、粉專網址、簡報、型錄、影片、圖片拖到這裡<br><br><button class="btn primary sm" onclick="alert('示意介面：不會真的上傳')">選擇檔案</button> <button class="btn sm" onclick="alert('示意介面')">貼上網址</button></div>
+ <table style="margin-top:10px"><tr><th>資料</th><th>類型</th><th>狀態</th></tr>${KNOW.map(k=>`<tr><td>${k.t}</td><td>${k.k}</td><td><span class="pill ok">${k.s}</span></td></tr>`).join("")}</table></div>
+ <div class="tile"><h3>產品檔案（AI 整理，可修改）</h3>
+ <table><tr><td class="muted">產品</td><td>${PROFILE.name}</td></tr><tr><td class="muted">HS 稅則號列</td><td>${PROFILE.hs}（插頭與插座）<span class="pill brand">可改</span></td></tr>
+ <tr><td class="muted">認證</td><td>${PROFILE.cert}</td></tr><tr><td class="muted">MOQ</td><td>${PROFILE.moq}</td></tr><tr><td class="muted">交期</td><td>${PROFILE.lead}</td></tr>
+ <tr><td class="muted">賣點</td><td>IP67／IP68、磁吸快拆、可客製線長；已供應歐洲兩個品牌（示意）</td></tr></table></div>
+</div>`;
+
+V.brain = ()=>`
+<h1>問商務腦</h1><p class="lead">問你想打的國家、產品或買家。數字一律附出處；查不到就直接說查不到。</p>
+<div class="chat"><div class="msgs" id="msgs">
+ <div class="m b">你好！我已經讀完你的官網、型錄和工廠影片，產品歸在 HS ${PROFILE.hs}。
+你想打哪一個國家？也可以問「哪 3 個國家最值得打」。</div>
+</div>
+<div class="chips">${["我要打日本","哪 3 個國家最值得打","越南的需求怎麼樣？","幫我寫日本的第一封信"].map(q=>`<button onclick="ask('${q}')">${q}</button>`).join("")}</div>
+<div class="composer"><input id="q" placeholder="例如：德國對電輔車零件的需求在上升嗎？" onkeydown="if(event.key==='Enter')ask(this.value)"><button class="btn primary" onclick="ask($('#q').value)">送出</button></div></div>`;
+function reply(q){
+  const c = COUNTRIES.find(x=>q.includes(x.c));
+  if(q.includes("3 個")) return {t:`依需求熱度和你的產品條件，建議先打：
+1. 日本 ${COUNTRIES[0].f}  熱度 78，近 3 個月詢價和回覆明顯上升（${COUNTRIES[0].d}）
+2. 德國 ${COUNTRIES[1].f}  熱度 74，進口持續成長，買家多
+3. 越南 ${COUNTRIES[2].f}  熱度 69，成長最快（${COUNTRIES[2].d}），電動機車組裝廠增加
+要看哪一國的細節？`,s:"出處：需求趨勢（1,284 家使用者匿名彙總）＋ UN Comtrade HS 8536.69（示意）"};
+  if(q.includes("寫")) return {t:`件名：【IP67 防水コネクタ】e-Bike 向け｜サンプル提供のご案内
+
+示意 A 電動自行車株式會社　ご担当者様
+
+突然のご連絡失礼いたします。台湾の示意公司で営業を担当しております……
+（依日本商務禮儀：敬語、公司介紹 2 行、具體賣點 3 點、附日文型錄、提出樣品）
+
+要寄給名單裡 18 家有採購窗口 Email 的公司嗎？寄出前會先給你核准。`,s:"管道建議：日本第一封用 Email；回覆後改 LINE 約會議"};
+  if(c){ state.country=c.c; return {t:`${c.f} ${c.c}：需求熱度 ${c.idx}／100，${c.tr==="up"?"上升":c.tr==="down"?"下降":"持平"}（近 3 個月 ${c.d}）。
+・公開進口數據：${c.imp}（資料落後約 3 個月）
+・使用者匿名訊號：詢價與回覆${c.tr==="up"?"增加":"沒有明顯變化"}，更新頻率：${c.lag}
+・名單庫找到 ${c.buyers} 家可能的買家
+・建議管道：${c.ch}
+
+我不會顯示其他使用者的客戶或報價，只提供匯總後的趨勢。要看趨勢圖或買家名單嗎？`,s:`出處：需求趨勢（匿名彙總，門檻：至少 5 家使用者公司、20 個買家）＋ ${c.c}海關進口統計（示意）`}; }
+  return {t:"我先以你的產品（HS "+PROFILE.hs+"）來看。可以告訴我想打的國家嗎？例如日本、德國、越南、美國、印度。",s:""};
+}
+function ask(q){ q=(q||"").trim(); if(!q) return; const box=$("#msgs");
+  box.insertAdjacentHTML("beforeend",`<div class="m u"></div>`); box.lastElementChild.textContent=q;
+  const r=reply(q); setTimeout(()=>{ box.insertAdjacentHTML("beforeend",`<div class="m b"></div>`); const el=box.lastElementChild; el.textContent=r.t; if(r.s){const s=document.createElement("span");s.className="src";s.textContent=r.s;el.appendChild(s);} box.scrollTop=box.scrollHeight; },350);
+  const qi=$("#q"); if(qi) qi.value=""; box.scrollTop=box.scrollHeight; }
+
+V.trends = ()=>`
+<h1>需求趨勢</h1><p class="lead">企業機密不外流：這裡只顯示所有使用者匿名彙總後的需求趨勢，加上公開進口數據。使用的人越多，涵蓋越廣、更新越即時。</p>
+<div class="grid g4">
+ <div class="tile"><div class="muted">產品</div><b>HS ${PROFILE.hs}</b><div class="muted">${PROFILE.name}</div></div>
+ <div class="tile"><div class="muted">匿名彙總的使用者公司</div><b style="font-size:20px">1,284</b><div class="muted">本月 +96</div></div>
+ <div class="tile"><div class="muted">本月匿名商務訊號</div><b style="font-size:20px">38,920</b><div class="muted">寄信、回覆、詢價、約會議、成交</div></div>
+ <div class="tile"><div class="muted">更新頻率</div><b style="font-size:20px">每週</b><div class="muted">公開進口數據落後約 3 個月</div></div>
+</div>
+<div class="grid g2" style="margin-top:14px">
+ <div class="tile"><div class="row"><h3>各國需求熱度</h3><span class="sp"></span></div>
+ <table><tr><th>國家</th><th>熱度</th><th></th><th>近 3 月</th><th>更新</th></tr>
+ ${COUNTRIES.map(c=>`<tr style="cursor:pointer" onclick="state.country='${c.c}';go('trends')"><td>${c.f} ${c.c}${state.country===c.c?' <span class="pill brand">選取</span>':''}</td><td style="width:34%"><div class="bar"><i style="width:${c.idx}%"></i></div></td><td>${c.idx}</td><td class="${c.tr}">${c.tr==="up"?"▲":c.tr==="down"?"▼":"■"} ${c.d}</td><td class="muted">${c.lag}</td></tr>`).join("")}
+ </table></div>
+ <div class="tile"><h3>${state.country}：近 12 個月需求熱度</h3><div id="chart"></div>
+ <p class="muted">熱度 = 使用者匿名訊號（詢價、回覆、成交的變化）＋ 公開進口數據。同一格少於 5 家使用者公司或 20 個買家就不顯示，避免反推出單一公司。</p></div>
+</div>`;
+V.trends_after = ()=>{ const d=SERIES[state.country]; const W=460,H=200,P=28; const mx=100,mn=30;
+  const x=i=>P+i*(W-P*2)/(d.length-1), y=v=>H-P-(v-mn)*(H-P*2)/(mx-mn);
+  const pts=d.map((v,i)=>`${x(i)},${y(v)}`).join(" ");
+  const months=["12月","1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月"];
+  $("#chart").innerHTML=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${state.country}需求熱度趨勢">
+  ${[40,60,80,100].map(g=>`<line x1="${P}" x2="${W-P}" y1="${y(g)}" y2="${y(g)}" stroke="currentColor" opacity=".12"/><text x="4" y="${y(g)+4}">${g}</text>`).join("")}
+  <polyline points="${pts}" fill="none" stroke="#1f5fd1" stroke-width="2.5"/>
+  ${d.map((v,i)=>i%3===2||i===d.length-1?`<circle cx="${x(i)}" cy="${y(v)}" r="3.5" fill="#1f5fd1"/><text x="${x(i)-10}" y="${H-8}">${months[i]}</text>`:"").join("")}
+  <text x="${x(d.length-1)-14}" y="${y(d[d.length-1])-8}" style="fill:#1f5fd1;font-weight:bold">${d[d.length-1]}</text></svg>`; };
+
+V.buyers = ()=>`
+<h1>買家名單</h1><p class="lead">從名單庫和公開資料配對；每家都標出建議的聯絡管道。勾選後到「聯絡計畫」產生信件。</p>
+<div class="tile"><table><tr><th></th><th>公司（示意）</th><th>國家</th><th>類型</th><th>可用管道</th><th>契合度</th></tr>
+${BUYERS.map(b=>`<tr><td><input type="checkbox" ${b.fit>85?"checked":""}></td><td>${b.n}</td><td>${b.c}</td><td>${b.t}</td><td>${b.ch.map(x=>`<span class="pill">${x}</span>`).join(" ")}</td><td style="width:18%"><div class="bar"><i style="width:${b.fit}%"></i></div><span class="muted">${b.fit}</span></td></tr>`).join("")}
+</table><div class="row" style="margin-top:10px"><span class="muted">已選 3 家</span><span class="sp"></span><button class="btn primary" onclick="go('plan')">產生聯絡計畫</button></div></div>`;
+
+V.plan = ()=>`
+<h1>聯絡計畫｜${state.country}</h1><p class="lead">依當地商務習慣排出每一步用哪個管道。寄出前一定要你核准。</p>
+<div class="grid g4">
+ ${[["第 1 天","Email","日文正式信＋型錄 PDF＋樣品提案","#d93025"],["第 5 天","Email","沒回覆：補一封短信，附應用案例","#d93025"],["回覆後","LINE","加 LINE 好友，約線上會議","#06c755"],["會議後","Email","正式報價與會議紀錄","#d93025"]].map(s=>`
+ <div class="tile"><div class="muted">${s[0]}</div><div class="row" style="margin:6px 0"><span class="ch-ico" style="background:${s[3]}">${s[1][0]}</span><b>${s[1]}</b></div><div>${s[2]}</div></div>`).join("")}
+</div>
+<div class="tile" style="margin-top:14px"><h3>寄出前檢查</h3>
+<div class="row"><span class="pill ok">只寄已核准的信</span><span class="pill ok">退訂、退信自動排除</span><span class="pill ok">每封間隔 30 秒</span><span class="pill ok">今日額度內</span><span class="pill warn">LINE：對方加好友後才會傳</span></div>
+<div class="row" style="margin-top:10px"><span class="sp"></span><button class="btn">預覽 3 封信</button><button class="btn primary" onclick="this.textContent='示意：已送出核准';this.disabled=true">核准並排程</button></div></div>`;
+
+V.inbox = ()=>`
+<h1>收件匣</h1><p class="lead">Email、LINE、WhatsApp、Zalo、LinkedIn 的回覆都在這裡；商務腦會建議下一步。</p>
+<div class="tile"><table><tr><th>管道</th><th>來自（示意）</th><th>內容</th><th>狀態</th><th>時間</th></tr>
+${INBOX.map(m=>`<tr><td><span class="ch-ico" style="background:${m.c};width:24px;height:24px;font-size:11px">${m.ch[0]}</span> ${m.ch}</td><td>${m.f}</td><td>${m.t}</td><td><span class="pill brand">${m.s}</span></td><td class="muted">${m.w}</td></tr>`).join("")}
+</table></div>
+<div class="tile" style="margin-top:14px"><h3>🧠 商務腦建議</h3><p>示意 A 問 IP68 交期：建議 24 小時內回覆，附 IP68 規格表，並提議用 LINE 約 30 分鐘線上會議。<button class="btn sm primary" onclick="go('brain')">幫我擬回覆</button></p></div>`;
+</script>
+</body>
+</html>
