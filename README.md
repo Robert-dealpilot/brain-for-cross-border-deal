@@ -31,6 +31,12 @@ The **Market Data** page in the demo is built from DealPilot's real operating da
 - 匿名門檻：同一格至少 5 家使用者公司、20 個買家才顯示，並加上差分隱私誤差。
 - 使用的人越多，涵蓋的國家和產品越廣，更新從「月」縮短到「週」。
 
+## Packaging (offline bundle)
+```
+node tools/pack.mjs            # or: npm run pack
+```
+Builds `dist/brain-for-cross-border-deal-<version>.zip` and `.tar.gz` (plus `.sha256`): the app, docs, launchers for Windows / macOS / Linux, and a `manifest.json` with the SHA-256 of every file. The packager refuses to build if the published data file contains an email address, a URL, or any cell below the privacy threshold. Pushing a `v*` tag runs the same packager in GitHub Actions and attaches the bundle to a GitHub Release.
+
 ## 本機試用介面
 直接用瀏覽器打開 `apps/web/index.html`（不用安裝、不連網，資料都是示意）。
 

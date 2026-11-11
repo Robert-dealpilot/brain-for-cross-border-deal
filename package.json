@@ -1,0 +1,12 @@
+{
+  "name": "brain-for-cross-border-deal",
+  "version": "0.2.0",
+  "description": "Email-first AI business brain for cross-border B2B deals",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "pack": "node tools/pack.mjs",
+    "start": "node -e \"import('node:child_process').then(c=>c.exec((process.platform==='win32'?'start \\\"\\\" ':process.platform==='darwin'?'open ':'xdg-open ')+'apps/web/index.html'))\""
+  },
+  "license": "UNLICENSED"
+}

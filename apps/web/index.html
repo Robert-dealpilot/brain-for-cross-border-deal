@@ -157,14 +157,52 @@ const SERIES = {
   "India":[48,49,51,52,53,55,56,57,58,59,60,61],"Netherlands":[57,58,57,59,58,58,57,59,58,58,57,58],
   "South Korea":[60,59,58,58,57,56,56,55,54,53,53,52],"Thailand":[38,39,40,40,41,42,43,44,45,45,46,47],
 };
-const BUYERS = [
-  {n:"Sample A E-Bike K.K.",c:"Japan",t:"E-bike brand",ch:["Email","LINE"],fit:92},
-  {n:"Sample B Drive Systems K.K.",c:"Japan",t:"Drive-system maker",ch:["Email"],fit:88},
-  {n:"Sample C Bike GmbH",c:"Germany",t:"Bicycle brand",ch:["Email","LinkedIn"],fit:86},
-  {n:"Sample D Battery Modules K.K.",c:"Japan",t:"Battery-pack maker",ch:["Email"],fit:81},
-  {n:"Sample E Xe Dien JSC",c:"Vietnam",t:"E-scooter assembler",ch:["Email","Zalo"],fit:79},
-  {n:"Sample F Components BV",c:"Netherlands",t:"Parts distributor",ch:["Email","LinkedIn"],fit:74},
+// Sample buyers grouped by region (names are fictional; channels follow each market's business habits)
+const REGIONS = [
+  {r:"Northeast Asia",f:"🌏",list:[
+    {n:"Sample A E-Bike K.K.",c:"Japan",t:"E-bike brand",ch:["Email","LINE"],fit:92},
+    {n:"Sample B Drive Systems K.K.",c:"Japan",t:"Drive-system maker",ch:["Email"],fit:88},
+    {n:"Sample D Battery Modules K.K.",c:"Japan",t:"Battery-pack maker",ch:["Email"],fit:81},
+    {n:"Sample G Mobility Co., Ltd.",c:"South Korea",t:"E-scooter brand",ch:["Email","KakaoTalk"],fit:72},
+    {n:"Sample H Cycle Trading Ltd.",c:"Hong Kong",t:"Parts importer",ch:["Email","WhatsApp"],fit:66},
+    {n:"Sample I Electric Vehicle Co.",c:"China",t:"Two-wheeler OEM",ch:["Email","WeChat"],fit:61}]},
+  {r:"Southeast Asia",f:"🌴",list:[
+    {n:"Sample E Xe Dien JSC",c:"Vietnam",t:"E-scooter assembler",ch:["Email","Zalo"],fit:79},
+    {n:"Sample J Motor Parts Co., Ltd.",c:"Thailand",t:"Parts distributor",ch:["Email","LINE"],fit:70},
+    {n:"Sample K Sepeda Listrik PT",c:"Indonesia",t:"E-bike assembler",ch:["WhatsApp","Email"],fit:68},
+    {n:"Sample L Mobility Sdn Bhd",c:"Malaysia",t:"Distributor",ch:["WhatsApp","Email"],fit:63},
+    {n:"Sample M E-Trike Corp.",c:"Philippines",t:"E-trike maker",ch:["WhatsApp","Email"],fit:62},
+    {n:"Sample N Micromobility Pte Ltd",c:"Singapore",t:"Fleet operator",ch:["Email","LinkedIn"],fit:58}]},
+  {r:"South Asia",f:"🛺",list:[
+    {n:"Sample O EV Components Pvt Ltd",c:"India",t:"EV parts maker",ch:["LinkedIn","WhatsApp"],fit:71},
+    {n:"Sample P Cycles Ltd.",c:"India",t:"Bicycle brand",ch:["Email","WhatsApp"],fit:64}]},
+  {r:"Middle East",f:"🕌",list:[
+    {n:"Sample Q Trading LLC",c:"United Arab Emirates",t:"Regional distributor",ch:["Email","WhatsApp"],fit:65},
+    {n:"Sample R Mobility Co.",c:"Saudi Arabia",t:"Delivery fleet",ch:["WhatsApp","Email"],fit:57},
+    {n:"Sample S Tech Ltd.",c:"Israel",t:"E-bike brand",ch:["Email","LinkedIn"],fit:60}]},
+  {r:"Europe",f:"🏰",list:[
+    {n:"Sample C Bike GmbH",c:"Germany",t:"Bicycle brand",ch:["Email","LinkedIn"],fit:86},
+    {n:"Sample T Antriebe GmbH",c:"Germany",t:"Motor maker",ch:["Email","LinkedIn"],fit:83},
+    {n:"Sample F Components BV",c:"Netherlands",t:"Parts distributor",ch:["Email","LinkedIn"],fit:74},
+    {n:"Sample U Bici S.r.l.",c:"Italy",t:"E-MTB brand",ch:["Email","WhatsApp"],fit:69},
+    {n:"Sample V Movilidad S.L.",c:"Spain",t:"Distributor",ch:["Email","WhatsApp"],fit:62},
+    {n:"Sample W Cycles Ltd.",c:"United Kingdom",t:"Cargo-bike brand",ch:["Email","LinkedIn"],fit:67},
+    {n:"Sample X Rowery Sp. z o.o.",c:"Poland",t:"Frame assembler",ch:["Email","LinkedIn"],fit:64},
+    {n:"Sample Y Vélo SAS",c:"France",t:"City-bike brand",ch:["Email","LinkedIn"],fit:61}]},
+  {r:"North America",f:"🗽",list:[
+    {n:"Sample Z E-Bikes Inc.",c:"United States",t:"DTC e-bike brand",ch:["Email","LinkedIn"],fit:77},
+    {n:"Sample AA Power Systems LLC",c:"United States",t:"Battery integrator",ch:["Email","LinkedIn"],fit:73},
+    {n:"Sample AB Mobility Inc.",c:"Canada",t:"Distributor",ch:["Email","LinkedIn"],fit:62},
+    {n:"Sample AC Motos S.A. de C.V.",c:"Mexico",t:"Two-wheeler assembler",ch:["WhatsApp","Email"],fit:59}]},
+  {r:"Latin America",f:"🌎",list:[
+    {n:"Sample AD Bicicletas Ltda.",c:"Brazil",t:"Bicycle brand",ch:["WhatsApp","Email"],fit:63},
+    {n:"Sample AE Movilidad SpA",c:"Chile",t:"Importer",ch:["WhatsApp","Email"],fit:55}]},
+  {r:"Africa & Oceania",f:"🌍",list:[
+    {n:"Sample AF E-Moto Ltd.",c:"Kenya",t:"E-motorcycle maker",ch:["WhatsApp","Email"],fit:60},
+    {n:"Sample AG Cycles (Pty) Ltd",c:"South Africa",t:"Distributor",ch:["Email","WhatsApp"],fit:56},
+    {n:"Sample AH E-Bikes Pty Ltd",c:"Australia",t:"E-bike brand",ch:["Email","LinkedIn"],fit:66}]},
 ];
+const BUYERS = REGIONS.flatMap(g=>g.list);
 const INBOX = [
   {f:"Sample A E-Bike K.K.",ch:"Email",c:"#d93025",t:"Catalog received. What is the lead time for the IP68 version?",w:"Today 10:12",s:"Needs reply"},
   {f:"Sample E Xe Dien JSC",ch:"Zalo",c:"#0068ff",t:"Can you send price for 5,000 pcs?",w:"Yesterday",s:"Quote request"},
@@ -308,11 +346,17 @@ V.knowledge=()=>`
  <tr><td class="muted">Selling points</td><td>IP67/IP68, magnetic quick-release, custom cable length; supplying two European brands (sample)</td></tr></table></div>
 </div>`;
 
-V.buyers=()=>`
-<h1>Buyers</h1><p class="lead">Matched from the lead database and public data, each with the channels they actually use. Select buyers to build an outreach plan.</p>
-<div class="tile"><table><tr><th></th><th>Company (sample)</th><th>Country</th><th>Type</th><th>Channels</th><th>Fit</th></tr>
-${BUYERS.map(b=>`<tr><td><input type="checkbox" ${b.fit>85?"checked":""}></td><td>${b.n}</td><td>${b.c}</td><td>${b.t}</td><td>${b.ch.map(x=>`<span class="pill">${x}</span>`).join(" ")}</td><td style="width:18%"><div class="bar"><i style="width:${b.fit}%"></i></div><span class="muted">${b.fit}</span></td></tr>`).join("")}
-</table><div class="row" style="margin-top:10px"><span class="muted">3 selected</span><span class="sp"></span><button class="btn primary" onclick="go('plan')">Build outreach plan</button></div></div>`;
+V.buyers=()=>{ const cov=(window.SHOWCASE&&SHOWCASE.coverage.by_country)||{};
+  const row=b=>`<tr><td><input type="checkbox" class="bsel" ${b.fit>85?"checked":""} onchange="bcount()"></td><td>${b.n}</td><td>${b.c}</td><td>${b.t}</td><td>${b.ch.map(x=>`<span class="pill">${x}</span>`).join(" ")}</td><td style="width:16%"><div class="bar"><i style="width:${b.fit}%"></i></div><span class="muted">${b.fit}</span></td></tr>`;
+  return `
+<h1>Buyers</h1><p class="lead">Matched from the lead database and public data, grouped by region, each with the channels that market actually uses. Select buyers to build an outreach plan.</p>
+<div class="row" style="margin-bottom:10px"><span class="muted">${BUYERS.length} sample buyers in ${REGIONS.length} regions</span><span class="sp"></span>
+<button class="btn sm" onclick="document.querySelectorAll('details.reg').forEach(d=>d.open=true)">Expand all</button><button class="btn sm" onclick="document.querySelectorAll('details.reg').forEach(d=>d.open=false)">Collapse all</button></div>
+${REGIONS.map(g=>{const cs=[...new Set(g.list.map(b=>b.c))];const real=cs.reduce((a,c)=>a+(cov[c]||0),0);
+ return `<details class="reg tile" open style="margin-bottom:10px"><summary class="row" style="cursor:pointer;list-style:none"><b>${g.f} ${g.r}</b><span class="pill">${g.list.length} buyers</span><span class="muted">${cs.join(" · ")}</span><span class="sp"></span>${real?`<span class="muted">Real lead coverage: ${fmt(real)} companies</span>`:''}</summary>
+ <table style="margin-top:8px"><tr><th></th><th>Company (sample)</th><th>Country</th><th>Type</th><th>Channels</th><th>Fit</th></tr>${g.list.slice().sort((a,b)=>b.fit-a.fit).map(row).join("")}</table></details>`;}).join("")}
+<div class="tile row" style="position:sticky;bottom:0"><span class="muted" id="bsel">3 selected</span><span class="sp"></span><button class="btn primary" onclick="go('plan')">Build outreach plan</button></div>`; };
+function bcount(){ const n=document.querySelectorAll('.bsel:checked').length; const e=document.getElementById('bsel'); if(e) e.textContent=n+' selected'; }
 
 V.plan=()=>`
 <h1>Outreach Plan · ${state.country}</h1><p class="lead">Each step uses the channel that fits local business habits. Nothing is sent until you approve it.</p>
