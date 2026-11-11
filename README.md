@@ -6,7 +6,10 @@
 - **Network effect:** every user's outreach events (sent, replied, inquiry, meeting, won) feed the trend engine anonymously, so the more people use it, the wider the coverage and the closer to real time it gets (public customs data lags 2–6 months; user signals are weekly).
 - **Built on DealPilot:** reuses DealPilot's lead database, AI email writing, approval-before-send, batch sending, and tracking.
 
-**Live demo (clickable prototype, sample data only):** open `apps/web/index.html`, or the GitHub Pages link in the repo description.
+## YC RFS track: Collecting Real-World Data
+Public trade statistics lag 2–6 months and rarely show what buyers want *right now*. Every company using Brain for Cross-border Deal generates real-world B2B demand signals in the course of normal outreach: which countries reply, ask for quotes, book meetings and close, for which product categories (HS codes), this week. We collect these events with consent, strip company and contact identity, enforce a minimum cohort (≥5 user companies, ≥20 buyers) plus differential-privacy noise, and publish them back as a live demand index. The data set grows with every user, and that is the moat.
+
+**Live demo (clickable prototype, sample data only):** https://robert-dealpilot.github.io/brain-for-cross-border-deal/ (or open `apps/web/index.html`).
 
 ---
 
